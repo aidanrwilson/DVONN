@@ -1,17 +1,17 @@
 /*
  * littlegolem.cpp
- * 
+ *
  * functions to read Dvonn files from littlegolem
- * 
- * Copyright (c) 2005 by Martin Trautmann (martintrautmann@gmx.de) 
- * 
- * This file may be distributed and/or modified under the terms of the 
- * GNU General Public License version 2 as published by the Free Software 
- * Foundation. 
- * 
+ *
+ * Copyright (c) 2005 by Martin Trautmann (martintrautmann@gmx.de)
+ *
+ * This file may be distributed and/or modified under the terms of the
+ * GNU General Public License version 2 as published by the Free Software
+ * Foundation.
+ *
  * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  */
 
 #include "littlegolem.hpp"
@@ -20,59 +20,60 @@
 
 namespace dvonn
 {
-  LG_Content scan_littlegolem_file( std::istream &is )
-  {
-    LG_Content ret, invalid; invalid.moves = -1; // invalid
-    
+LG_Content scan_littlegolem_file( std::istream &is )
+{
+    LG_Content ret, invalid;
+    invalid.moves = -1; // invalid
+
     std::string str;
-    char ch; 
+    char ch;
 
     is >> str;
-    if( str != "Event" ) 
-      return invalid;
+    if( str != "Event" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
-    
+    if( ch != '[' )
+        return invalid;
+
     getline(is,str,']');
     ret.event = str;
 
     /*
     is >> ch;
-    if( ch != ']' ) 
+    if( ch != ']' )
       return invalid;
     */
 
     is >> str;
-    if( str != "Site" ) 
-      return invalid;
+    if( str != "Site" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
+    if( ch != '[' )
+        return invalid;
 
     getline(is,str,']');
     ret.site = str;
 
     is >> str;
-    if( str != "White" ) 
-      return invalid;
+    if( str != "White" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
+    if( ch != '[' )
+        return invalid;
 
     getline(is,str,']');
     ret.white_name = str;
 
     is >> str;
-    if( str != "Black" ) 
-      return invalid;
+    if( str != "Black" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
+    if( ch != '[' )
+        return invalid;
 
     getline(is,str,']');
     ret.black_name = str;
@@ -81,82 +82,82 @@ namespace dvonn
     int move_num, cmp_num;
     for( move_num = 1; is; ++move_num )
     {
-      is >> cmp_num;
-      if( !is )			// there might be white spaces at EOF
-	return ret;
+        is >> cmp_num;
+        if( !is )			// there might be white spaces at EOF
+            return ret;
 
-      if( move_num != cmp_num )
-	return invalid;
+        if( move_num != cmp_num )
+            return invalid;
 
-      is >> ch;
-      if( ch != '.' )
-	return invalid;
+        is >> ch;
+        if( ch != '.' )
+            return invalid;
 
-      is >> str;		// move white
-      ++ret.moves;
-      is >> str;		// move black
-      if( !is )			// last read was EOF
-	return ret;
-      else
-	++ret.moves;
+        is >> str;		// move white
+        ++ret.moves;
+        is >> str;		// move black
+        if( !is )			// last read was EOF
+            return ret;
+        else
+            ++ret.moves;
     }
     return invalid;
-  }
+}
 
-  int load_littlegolem_file( std::istream &is, Game &game )
-  {
+int load_littlegolem_file( std::istream &is, Game &game )
+{
     LG_Content ret;
     int invalid = -1;
-    
+
     std::string str;
-    char ch; 
+    char ch;
 
     is >> str;
-    if( str != "Event" ) 
-      return invalid;
+    if( str != "Event" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
-    
+    if( ch != '[' )
+        return invalid;
+
     getline(is,str,']');
     ret.event = str;
 
     /*
     is >> ch;
-    if( ch != ']' ) 
+    if( ch != ']' )
       return invalid;
     */
 
     is >> str;
-    if( str != "Site" ) 
-      return invalid;
+    if( str != "Site" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
+    if( ch != '[' )
+        return invalid;
 
     getline(is,str,']');
     ret.site = str;
 
     is >> str;
-    if( str != "White" ) 
-      return invalid;
+    if( str != "White" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
+    if( ch != '[' )
+        return invalid;
 
     getline(is,str,']');
     ret.white_name = str;
 
     is >> str;
-    if( str != "Black" ) 
-      return invalid;
+    if( str != "Black" )
+        return invalid;
 
     is >> ch;
-    if( ch != '[' ) 
-      return invalid;
+    if( ch != '[' )
+        return invalid;
 
     getline(is,str,']');
     ret.black_name = str;
@@ -179,76 +180,76 @@ namespace dvonn
     int move_num, cmp_num;
     for( move_num = 1; is; ++move_num )
     {
-      is >> cmp_num;
-      if( !is )			// there might be white spaces at EOF
-	return ret.moves;
+        is >> cmp_num;
+        if( !is )			// there might be white spaces at EOF
+            return ret.moves;
 
-      if( move_num != cmp_num )
-	return invalid;
+        if( move_num != cmp_num )
+            return invalid;
 
-      is >> ch;
-      if( ch != '.' )
-	return invalid;
+        is >> ch;
+        if( ch != '.' )
+            return invalid;
 
-      // read white move
-      sequence = move_translator.decode( is );
-      if( !sequence.is_empty() ) // pass and resign cause empty moves
-      {
-	if( game.current_player->stone_type != Stones::white_stone )
-	{
+        // read white move
+        sequence = move_translator.decode( is );
+        if( !sequence.is_empty() ) // pass and resign cause empty moves
+        {
+            if( game.current_player->stone_type != Stones::white_stone )
+            {
 #ifndef __WXMSW__
-	  std::cout << "Illegal Move " << ret.moves << ": " << "It should be the turn of white" << std::endl;
+                std::cout << "Illegal Move " << ret.moves << ": " << "It should be the turn of white" << std::endl;
 #endif
-	  return ret.moves;
-	}
-	if( !sequence.check_sequence(game) ) 
-	{
+                return ret.moves;
+            }
+            if( !sequence.check_sequence(game) )
+            {
 #ifndef __WXMSW__
-	  std::cout << "Illegal Move " << ret.moves << ": " << sequence << std::endl;
+                std::cout << "Illegal Move " << ret.moves << ": " << sequence << std::endl;
 #endif
-	  return ret.moves;
-	}
-	game.do_move( sequence );
-	++ret.moves;
+                return ret.moves;
+            }
+            game.do_move( sequence );
+            ++ret.moves;
 #ifndef __WXMSW__
-	std::cout << "Move " << ret.moves << ": " << sequence << std::endl;
-	std::cout << "Current Player: " << game.current_player->name << std::endl;
+            std::cout << "Move " << ret.moves << ": " << sequence << std::endl;
+            std::cout << "Current Player: " << game.current_player->name << std::endl;
 #endif
-      }
+        }
 
-      if( !is )
-	return ret.moves;
+        if( !is )
+            return ret.moves;
 
-      // read black move
-      sequence = move_translator.decode( is );
-      if( !sequence.is_empty() ) // EOF, pass and resign cause empty moves
-      {
-	if( game.current_player->stone_type != Stones::black_stone )
-	{
+        // read black move
+        sequence = move_translator.decode( is );
+        if( !sequence.is_empty() ) // EOF, pass and resign cause empty moves
+        {
+            if( game.current_player->stone_type != Stones::black_stone )
+            {
 #ifndef __WXMSW__
-	  std::cout << "Illegal Move " << ret.moves << ": " << "It should be the turn of white" << std::endl;
+                std::cout << "Illegal Move " << ret.moves << ": " << "It should be the turn of white" << std::endl;
 #endif
-	  return ret.moves;
-	}
-	if( !sequence.check_sequence(game) ) 
-	{
+                return ret.moves;
+            }
+            if( !sequence.check_sequence(game) )
+            {
 #ifndef __WXMSW__
-	  std::cout << "Illegal Move " << ret.moves << ": " << sequence << std::endl;
+                std::cout << "Illegal Move " << ret.moves << ": " << sequence << std::endl;
 #endif
-	  return ret.moves;
-	}
-	game.do_move( sequence );
-	++ret.moves;
+                return ret.moves;
+            }
+            game.do_move( sequence );
+            ++ret.moves;
 #ifndef __WXMSW__
-	std::cout << "Move " << ret.moves << ": " << sequence << std::endl;
-	std::cout << "Current Player: " << game.current_player->name << std::endl;
+            std::cout << "Move " << ret.moves << ": " << sequence << std::endl;
+            std::cout << "Current Player: " << game.current_player->name << std::endl;
 #endif
-      }
+        }
 
-      if( !is )
-	return ret.moves;
+        if( !is )
+            return ret.moves;
     }
 
     return ret.moves;
-  }
+}
 }

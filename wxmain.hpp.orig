@@ -1,17 +1,17 @@
 /*
  * wxmain.hpp
- *
+ * 
  * wxWindows GUI framework
- *
- * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de)
- *
- * This file may be distributed and/or modified under the terms of the
- * GNU General Public License version 2 as published by the Free Software
- * Foundation.
- *
+ * 
+ * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de) 
+ * 
+ * This file may be distributed and/or modified under the terms of the 
+ * GNU General Public License version 2 as published by the Free Software 
+ * Foundation. 
+ * 
  * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
  */
 
 #ifndef __WXHOLTZ_MAIN__
@@ -19,7 +19,7 @@
 
 namespace holtz
 {
-class Game_Window;
+  class Game_Window;
 }
 
 #include "zertz/manager.hpp"
@@ -52,16 +52,16 @@ class Game_Window;
 
 namespace holtz
 {
-// ==========================================================================
-// wx application class
-// ==========================================================================
+  // ==========================================================================
+  // wx application class
+  // ==========================================================================
 
-class wxHoltz : public wxApp
-{
-public:
+  class wxHoltz : public wxApp
+  {
+  public:
     // override base class virtuals
     // ----------------------------
-
+    
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
@@ -69,29 +69,26 @@ public:
 
     bool check_config();
     bool init_help(wxLocale&);
-    wxHelpControllerBase& get_help_controller()
-    {
-        return help_controller;
-    }
+    wxHelpControllerBase& get_help_controller() { return help_controller; }
 
     ~wxHoltz();
 
-private:
+  private:
     wxHtmlHelpController help_controller; // HTML help
     wxConfigBase* global_config; // so that it can be deleted
-};
+  };
 
-// ============================================================================
-// frame or window classes
-// ============================================================================
+  // ============================================================================
+  // frame or window classes
+  // ============================================================================
 
-/*! class Game_Window
- *  window component on which the game is placed
- */
+  /*! class Game_Window
+   *  window component on which the game is placed
+   */
 
-class Game_Window : public wxScrolledWindow
-{
-public:
+  class Game_Window : public wxScrolledWindow
+  {
+  public:
     enum Game_Type { NO_GAME, ZERTZ, DVONN, RELAX, BLOKS };
 
     Game_Window( wxFrame *parent_frame );
@@ -127,35 +124,17 @@ public:
     void refresh();
     wxDC *get_client_dc();	// must be destroyed
 
-    inline wxFrame &get_frame()
-    {
-        return parent_frame;
-    }
-    Game_Type get_active_game()
-    {
-        return active_game;
-    }
-    inline zertz::WX_GUI_Manager &get_zertz_gui_manager()
-    {
-        assert(active_game==ZERTZ);
-        return *zertz_gui_manager;
-    }
-    inline dvonn::WX_GUI_Manager &get_dvonn_gui_manager()
-    {
-        assert(active_game==DVONN);
-        return *dvonn_gui_manager;
-    }
-    inline bloks::WX_GUI_Manager &get_bloks_gui_manager()
-    {
-        assert(active_game==BLOKS);
-        return *bloks_gui_manager;
-    }
-    inline relax::WX_GUI_Manager &get_relax_gui_manager()
-    {
-        assert(active_game==RELAX);
-        return *relax_gui_manager;
-    }
-private:
+    inline wxFrame &get_frame() { return parent_frame; }
+    Game_Type get_active_game() { return active_game; }
+    inline zertz::WX_GUI_Manager &get_zertz_gui_manager() 
+    { assert(active_game==ZERTZ); return *zertz_gui_manager; }
+    inline dvonn::WX_GUI_Manager &get_dvonn_gui_manager() 
+    { assert(active_game==DVONN); return *dvonn_gui_manager; }
+    inline bloks::WX_GUI_Manager &get_bloks_gui_manager() 
+    { assert(active_game==BLOKS); return *bloks_gui_manager; }
+    inline relax::WX_GUI_Manager &get_relax_gui_manager() 
+    { assert(active_game==RELAX); return *relax_gui_manager; }
+  private:
     wxFrame &parent_frame;
 
     Game_Type active_game;
@@ -182,12 +161,12 @@ private:
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE();
-};
+  };
 
-// Define a new frame type: this is going to be our main frame
-class Main_Frame : public wxFrame
-{
-public:
+  // Define a new frame type: this is going to be our main frame
+  class Main_Frame : public wxFrame
+  {
+  public:
     // ctor(s)
     Main_Frame( const wxString& title );
     ~Main_Frame();
@@ -197,7 +176,7 @@ public:
     wxSize restore_size();
     wxPoint restore_position();
     void load_settings();
-
+    
     // event handlers (these functions should _not_ be virtual)
     void on_new_zertz_game(wxCommandEvent& event);
     void on_new_dvonn_game(wxCommandEvent& event);
@@ -212,11 +191,8 @@ public:
     void on_about(wxCommandEvent& event);
     void on_close(wxCloseEvent& event);
 
-    inline Game_Window &get_game_window()
-    {
-        return game_window;
-    }
-private:
+    inline Game_Window &get_game_window() { return game_window; }
+  private:
     Game_Window game_window;
 
     wxMenu *setting_menu;
@@ -224,16 +200,16 @@ private:
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE();
-};
+  };
 
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------
+  // constants
+  // ----------------------------------------------------------------------------
 
-// IDs for the controls and the menu commands
-enum
-{
+  // IDs for the controls and the menu commands
+  enum
+  {
     // menu items
     HOLTZ_NEW_GAME = 100,
     HOLTZ_NEW_ZERTZ_GAME,
@@ -296,7 +272,7 @@ enum
 
     DIALOG_OK = wxID_OK,	// the names are just for consistence
     DIALOG_CANCEL = wxID_CANCEL // wxID_OK and wxID_CANCEL have special functions in dialogs
-};
+  };
 }
 
 // declare the wxGetApp() function
