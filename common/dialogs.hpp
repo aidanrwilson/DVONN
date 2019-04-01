@@ -1,17 +1,17 @@
 /*
  * dialogs.hpp
- * 
+ *
  * GUI declaration
- * 
- * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de) 
- * 
- * This file may be distributed and/or modified under the terms of the 
- * GNU General Public License version 2 as published by the Free Software 
- * Foundation. 
- * 
+ *
+ * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de)
+ *
+ * This file may be distributed and/or modified under the terms of the
+ * GNU General Public License version 2 as published by the Free Software
+ * Foundation.
+ *
  * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  */
 
 #define DEFAULT_PORT_ZERTZ 6211
@@ -69,9 +69,9 @@ namespace bloks
 namespace relax
 #endif
 {
-  class Game_Dialog;
-  class Settings_Dialog;
-  class Network_Clients_Dialog;
+class Game_Dialog;
+class Settings_Dialog;
+class Network_Clients_Dialog;
 }
 
 #if defined(VERSION_ZERTZ)
@@ -123,15 +123,15 @@ namespace bloks
 namespace relax
 #endif
 {
-  // ============================================================================
-  // Game_Dialog
-  // ============================================================================
+// ============================================================================
+// Game_Dialog
+// ============================================================================
 
-  class Game_Dialog;
+class Game_Dialog;
 
-  class Setup_Manager_Page : public wxWizardPage
-  {
-  public:
+class Setup_Manager_Page : public wxWizardPage
+{
+public:
     Setup_Manager_Page( wxWizard *parent, Game_Dialog & );
 
     virtual wxWizardPage *GetPrev() const;
@@ -147,7 +147,7 @@ namespace relax
     void restore();		// display stored game state
     void client_connected();	// client connection established
     bool connection_closed();	// connection was closed, true: I told user
-  private:
+private:
     Game_Dialog &game_dialog;
     bool changes;
 
@@ -155,16 +155,18 @@ namespace relax
     wxTextCtrl *hostname;
     wxSpinCtrl *server_port, *client_port;
     wxStaticText *client_status;
-    bool connecting; bool connected; bool auto_next;
+    bool connecting;
+    bool connected;
+    bool auto_next;
     bool alone_val, network_server_val, network_client_val;
 
     friend class Game_Dialog;
     DECLARE_EVENT_TABLE() //**/
-  };
+};
 
-  class Board_Page : public wxWizardPage
-  {
-  public:
+class Board_Page : public wxWizardPage
+{
+public:
     Board_Page( wxWizard *parent, Game_Dialog & );
 
     virtual wxWizardPage *GetPrev() const;
@@ -177,7 +179,7 @@ namespace relax
     void on_new_game_choice	  ( wxCommandEvent& event );
 
     void restore();		// display stored game state
-  private:
+private:
     Game_Dialog &game_dialog;
     bool changes;
 
@@ -187,11 +189,11 @@ namespace relax
 
     friend class Game_Dialog;
     DECLARE_EVENT_TABLE() //**/
-  };
+};
 
-  class Custom_Board_Setup_Panel : public wxPanel
-  {
-  public:
+class Custom_Board_Setup_Panel : public wxPanel
+{
+public:
     Custom_Board_Setup_Panel( wxWindow *parent, Game_Dialog & );
     ~Custom_Board_Setup_Panel();
 
@@ -203,9 +205,15 @@ namespace relax
 
     void restore();
     Game get_board();		// get board according to chosen settings
-    bool is_changes() { return changes; }
-    void set_changes( bool ch ) { changes = ch; }
-  private:
+    bool is_changes()
+    {
+        return changes;
+    }
+    void set_changes( bool ch )
+    {
+        changes = ch;
+    }
+private:
     Game_Dialog &game_dialog;
     bool changes;
 
@@ -216,11 +224,11 @@ namespace relax
     wxSpinCtrl *stones_white, *stones_grey, *stones_black;
 
     DECLARE_EVENT_TABLE()
-  };
+};
 
-  class Custom_Board_Page : public wxWizardPage
-  {
-  public:
+class Custom_Board_Page : public wxWizardPage
+{
+public:
     Custom_Board_Page( wxWizard *parent, Game_Dialog & );
 
     virtual wxWizardPage *GetPrev() const;
@@ -230,18 +238,18 @@ namespace relax
     void on_page_changing( wxWizardEvent& event );
 
     void restore();		// display stored game state
-  private:
+private:
     Game_Dialog &game_dialog;
 
     Custom_Board_Setup_Panel *custom_board_panel;
 
     friend class Game_Dialog;
     DECLARE_EVENT_TABLE() //**/
-  };
+};
 
-  class Load_PBM_Board_Page : public wxWizardPage
-  {
-  public:
+class Load_PBM_Board_Page : public wxWizardPage
+{
+public:
     Load_PBM_Board_Page( wxWizard *parent, Game_Dialog & );
 
     virtual wxWizardPage *GetPrev() const;
@@ -249,7 +257,7 @@ namespace relax
     virtual bool transfer_data_from_window(bool direction);
 
     void restore();		// display stored game state
-  private:
+private:
     bool scan_directory( wxString directory );
     void on_page_changing   ( wxWizardEvent& event );
     void on_choose_directory( wxCommandEvent& event );
@@ -261,18 +269,18 @@ namespace relax
     wxTextCtrl *pbm_directory;
     wxListBox  *pbm_game_list;
 
-    std::map< int, std::list< std::pair<PBM_Content,std::string> > > pbm_files; 
-				// board_num -> last_move_num -> file
+    std::map< int, std::list< std::pair<PBM_Content,std::string> > > pbm_files;
+    // board_num -> last_move_num -> file
     int pbm_game_list_val;
 
     friend class Game_Dialog;
     DECLARE_EVENT_TABLE() //**/
-  };
+};
 
 #if defined(VERSION_DVONN)
-  class Load_LG_Board_Page : public wxWizardPage
-  {
-  public:
+class Load_LG_Board_Page : public wxWizardPage
+{
+public:
     Load_LG_Board_Page( wxWizard *parent, Game_Dialog & );
 
     virtual wxWizardPage *GetPrev() const;
@@ -280,7 +288,7 @@ namespace relax
     virtual bool transfer_data_from_window(bool direction);
 
     void restore();		// display stored game state
-  private:
+private:
     bool scan_directory( wxString directory );
     void on_page_changing   ( wxWizardEvent& event );
     void on_choose_directory( wxCommandEvent& event );
@@ -292,17 +300,17 @@ namespace relax
     wxTextCtrl *lg_directory;
     wxListBox  *lg_game_list;
 
-    std::list< std::pair<LG_Content,std::string> > lg_files; 
+    std::list< std::pair<LG_Content,std::string> > lg_files;
     int lg_game_list_val;
 
     friend class Game_Dialog;
     DECLARE_EVENT_TABLE() //**/
-  };
+};
 #endif
 
-  class Player_Setup_Panel : public wxPanel
-  {
-  public:
+class Player_Setup_Panel : public wxPanel
+{
+public:
     Player_Setup_Panel( wxWindow *parent, Game_Dialog & );
     ~Player_Setup_Panel();
 
@@ -325,7 +333,7 @@ namespace relax
     void players_changed();	// default players changed
     void everything_ready();	// all players are ready
     void update_status_display();
-  private:
+private:
     wxString get_default_name( int player_num );
     void set_player_name( wxString name );
 
@@ -343,11 +351,11 @@ namespace relax
 
     friend class Game_Dialog;
     DECLARE_EVENT_TABLE() //**/
-  };
+};
 
-  class Player_Page : public wxWizardPage
-  {
-  public:
+class Player_Page : public wxWizardPage
+{
+public:
     Player_Page( wxWizard *parent, Game_Dialog & );
 
     virtual wxWizardPage *GetPrev() const;
@@ -359,9 +367,15 @@ namespace relax
     void restore();		// display stored game state
     void players_changed();	// default players changed
     void everything_ready();	// all players are ready
-    void set_ready(bool r) { ready=r; }
-    bool is_ready() { return ready; }
-  private:
+    void set_ready(bool r)
+    {
+        ready=r;
+    }
+    bool is_ready()
+    {
+        return ready;
+    }
+private:
     Game_Dialog &game_dialog;
 
     Player_Setup_Panel *player_setup_panel;
@@ -372,15 +386,18 @@ namespace relax
 
     friend class Game_Dialog;
     DECLARE_EVENT_TABLE() //**/
-  };
+};
 
-  class Game_Setup_Wizard : public wxWizard
-  {
-  public:
+class Game_Setup_Wizard : public wxWizard
+{
+public:
     Game_Setup_Wizard( wxWindow *parent, int id, Game_Dialog& );
 
-    wxWizardPage *get_first_page() { return setup_manager_page; }
-  private:
+    wxWizardPage *get_first_page()
+    {
+        return setup_manager_page;
+    }
+private:
     Setup_Manager_Page  *setup_manager_page;
     Board_Page		*board_page;
     Custom_Board_Page   *custom_board_page;
@@ -392,11 +409,11 @@ namespace relax
     wxSize best_size;
 
     friend class Game_Dialog;
-  };
+};
 
-  class Game_Dialog : public Game_Setup_Display_Handler
-  {
-  public:
+class Game_Dialog : public Game_Setup_Display_Handler
+{
+public:
     Game_Dialog( wxWindow *parent, Game_Manager&, WX_GUI_Manager& );
     ~Game_Dialog();
 
@@ -420,23 +437,47 @@ namespace relax
     virtual void aborted();
     virtual void game_started();
     virtual bool ask_new_game( wxString who ); // other player asks for a new game (true: accept)
-    virtual bool ask_undo_moves( wxString who, int n = 2 ); 
-				// other player asks to undo a move (true: accept)
+    virtual bool ask_undo_moves( wxString who, int n = 2 );
+    // other player asks to undo a move (true: accept)
 
     void on_wizard_finished( wxWizardEvent& event );
     void on_wizard_page_changing( wxWizardEvent& event );
     void on_wizard_cancel( wxWizardEvent& event );
-  private:
+private:
     void get_data_from_setup_manager();
-    Setup_Manager_Page  *get_setup_manager_page() {assert(wizard);return wizard->setup_manager_page;}
-    Board_Page		*get_board_page()	  {assert(wizard);return wizard->board_page;}
-    Custom_Board_Page   *get_custom_board_page()  {assert(wizard);return wizard->custom_board_page;}
-    Load_PBM_Board_Page *get_load_pbm_board_page(){assert(wizard);return 
-								    wizard->load_pbm_board_page;}
+    Setup_Manager_Page  *get_setup_manager_page()
+    {
+        assert(wizard);
+        return wizard->setup_manager_page;
+    }
+    Board_Page		*get_board_page()
+    {
+        assert(wizard);
+        return wizard->board_page;
+    }
+    Custom_Board_Page   *get_custom_board_page()
+    {
+        assert(wizard);
+        return wizard->custom_board_page;
+    }
+    Load_PBM_Board_Page *get_load_pbm_board_page()
+    {
+        assert(wizard);
+        return
+            wizard->load_pbm_board_page;
+    }
 #if defined(VERSION_DVONN)
-    Load_LG_Board_Page  *get_load_lg_board_page() {assert(wizard);return wizard->load_lg_board_page;}
+    Load_LG_Board_Page  *get_load_lg_board_page()
+    {
+        assert(wizard);
+        return wizard->load_lg_board_page;
+    }
 #endif
-    Player_Page		*get_player_page()	  {assert(wizard);return wizard->player_page;}
+    Player_Page		*get_player_page()
+    {
+        assert(wizard);
+        return wizard->player_page;
+    }
 
     Game_Manager   &game_manager;
     WX_GUI_Manager &gui_manager;
@@ -466,21 +507,21 @@ namespace relax
 #endif
     friend class Player_Setup_Panel;
     friend class Player_Page;
-  };
+};
 
-  // ============================================================================
-  // Settings Dialog
-  // ============================================================================
+// ============================================================================
+// Settings Dialog
+// ============================================================================
 
-  class Display_Setup_Page : public wxPanel
-  {
-  public:
+class Display_Setup_Page : public wxPanel
+{
+public:
     Display_Setup_Page( wxWindow *parent, Settings_Dialog *, WX_GUI_Manager & );
     ~Display_Setup_Page();
 
     void restore_settings();
     void apply ();
-  private:
+private:
     Settings_Dialog *dialog;
     WX_GUI_Manager &gui_manager;
 
@@ -493,11 +534,11 @@ namespace relax
     wxCheckBox *multiple_common_stones;
 
     DECLARE_EVENT_TABLE()	//**/
-  };
+};
 
-  class Look_Feel_Page : public wxPanel
-  {
-  public:
+class Look_Feel_Page : public wxPanel
+{
+public:
     Look_Feel_Page( wxWindow *parent, Settings_Dialog *, WX_GUI_Manager & );
     ~Look_Feel_Page();
 
@@ -511,7 +552,7 @@ namespace relax
     void on_choose_player_font( wxCommandEvent& event );
     void on_choose_coord_font( wxCommandEvent& event );
     void on_choose_stone_font( wxCommandEvent& event );
-  private:
+private:
     Settings_Dialog *dialog;
     WX_GUI_Manager &gui_manager;
 
@@ -529,11 +570,11 @@ namespace relax
     wxFont stone_font;
 
     DECLARE_EVENT_TABLE()	//**/
-  };
+};
 
-  class Settings_Dialog : public wxDialog
-  {
-  public:
+class Settings_Dialog : public wxDialog
+{
+public:
     Settings_Dialog( wxWindow *parent, WX_GUI_Manager &);
 
     void on_ok     ( wxCommandEvent& event );
@@ -541,7 +582,7 @@ namespace relax
     void on_restore( wxCommandEvent& event );
     void on_cancel ( wxCommandEvent& event );
 
-  private:
+private:
     WX_GUI_Manager &gui_manager;
 
     wxNotebook *notebook;
@@ -553,15 +594,15 @@ namespace relax
     friend class Look_Feel_Page;
 
     DECLARE_EVENT_TABLE()	//**/
-  };
+};
 
-  // ============================================================================
-  // Network_Clients_Dialog
-  // ============================================================================
+// ============================================================================
+// Network_Clients_Dialog
+// ============================================================================
 
-  class Network_Clients_Dialog : public wxDialog, Network_Connection_Handler
-  {
-  public:
+class Network_Clients_Dialog : public wxDialog, Network_Connection_Handler
+{
+public:
     Network_Clients_Dialog( wxWindow *parent, Basic_Network_Server &network_server );
     ~Network_Clients_Dialog();
 
@@ -572,7 +613,7 @@ namespace relax
     void on_disconnect( wxCommandEvent& event );
     void on_dclick( wxCommandEvent& event );
     void on_allow_connect( wxCommandEvent& event );
-  private:
+private:
     wxListBox  *client_list;
     wxCheckBox *allow_connect;
     std::map<void*,Basic_Network_Server::Connection_Id> client_data;
@@ -582,80 +623,83 @@ namespace relax
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()	//**/
-  };
+};
 
-  // ============================================================================
-  // Network_Connection_Dialog
-  // ============================================================================
+// ============================================================================
+// Network_Connection_Dialog
+// ============================================================================
 
-  class Network_Connection_Dialog : public wxDialog // modal dialog
-  {
-  public:
+class Network_Connection_Dialog : public wxDialog // modal dialog
+{
+public:
     Network_Connection_Dialog( wxWindow *parent );
 
     wxFlexGridSizer *sizer;
     wxRadioButton *server, *client;
     wxTextCtrl *hostname;
     wxSpinCtrl *port;
-  private:
+private:
     DECLARE_EVENT_TABLE()
-  };
+};
 
-  // ============================================================================
-  // Game_Variants_Panel
-  // ============================================================================
+// ============================================================================
+// Game_Variants_Panel
+// ============================================================================
 
-  class Variant_Tree_Item_Data : public wxTreeItemData
-  {
-  public:
+class Variant_Tree_Item_Data : public wxTreeItemData
+{
+public:
     Variant_Tree_Item_Data() : tree_version(0) {}
-    Variant_Tree_Item_Data(unsigned ver, 
-			   std::list<unsigned> variant_id_path = std::list<unsigned>()) 
-      : tree_version(ver), variant_id_path(variant_id_path) {}
+    Variant_Tree_Item_Data(unsigned ver,
+                           std::list<unsigned> variant_id_path = std::list<unsigned>())
+        : tree_version(ver), variant_id_path(variant_id_path) {}
 
     unsigned tree_version;
     std::list<unsigned> variant_id_path;
     std::map<unsigned,wxTreeItemId> varid_treeid_map;
-  };
+};
 
-  class Game_Variants_Panel : public wxPanel, public Variants_Display_Manager
-  {
-  public:
+class Game_Variants_Panel : public wxPanel, public Variants_Display_Manager
+{
+public:
     Game_Variants_Panel( wxWindow *parent );
 
     // functions inherited from Variants_Display_Manager
     virtual void reset();
     virtual void show_variant_tree(const Variant_Tree &,
-				   Coordinate_Translator *);
+                                   Coordinate_Translator *);
 
     void on_activated( wxTreeEvent& );
     void on_changing( wxTreeEvent& );
-  private:
+private:
     unsigned current_tree_version;
     Variant_Tree variant_tree;
     wxTreeCtrl *tree;
     wxTreeItemId selected_variant_id;
 
     DECLARE_EVENT_TABLE()
-  };
+};
 
-  // ============================================================================
-  // Game_Variants_Frame
-  // ============================================================================
+// ============================================================================
+// Game_Variants_Frame
+// ============================================================================
 
-  class Game_Variants_Frame : public wxFrame
-  {
-  public:
+class Game_Variants_Frame : public wxFrame
+{
+public:
     Game_Variants_Frame( wxWindow *parent );
 
-    Game_Variants_Panel *get_game_variants() { return game_variants; }
+    Game_Variants_Panel *get_game_variants()
+    {
+        return game_variants;
+    }
     void show_frame();
 
     void on_close( wxCloseEvent &event );
-  private:
+private:
     Game_Variants_Panel *game_variants;
     DECLARE_EVENT_TABLE()
-  };
+};
 }
 
 #endif

@@ -1,17 +1,17 @@
 /*
  * wxrelax.hpp
- * 
+ *
  * GUI declaration
- * 
- * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de) 
- * 
- * This file may be distributed and/or modified under the terms of the 
- * GNU General Public License version 2 as published by the Free Software 
- * Foundation. 
- * 
+ *
+ * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de)
+ *
+ * This file may be distributed and/or modified under the terms of the
+ * GNU General Public License version 2 as published by the Free Software
+ * Foundation.
+ *
  * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  */
 
 #include <wx/wx.h>
@@ -27,7 +27,7 @@
 
 namespace relax
 {
-  class WX_GUI_Manager;
+class WX_GUI_Manager;
 }
 
 #include "manager.hpp"
@@ -35,18 +35,18 @@ namespace relax
 #include "animations.hpp"
 #include "ai.hpp"
 
-namespace holtz 
+namespace holtz
 {
 //#include "wxmain.hpp"
-  class Game_Window;
+class Game_Window;
 }
 
 namespace relax
 {
 //#include "dialogs.hpp"
-  // classes defined in dialogs.hpp
-  class Game_Dialog;
-  class Settings_Dialog;
+// classes defined in dialogs.hpp
+class Game_Dialog;
+class Settings_Dialog;
 }
 
 // declare custom event type wx_EVT_RELAX_NOTIFY
@@ -64,26 +64,29 @@ END_DECLARE_EVENT_TYPES()
 
 namespace relax
 {
-  using namespace holtz;
+using namespace holtz;
 
-  // ============================================================================
-  // generic classes
-  // ============================================================================
+// ============================================================================
+// generic classes
+// ============================================================================
 
-  struct Bitmap_Set
-  {
+struct Bitmap_Set
+{
     std::map<Field_State_Type,wxBitmap> field_bitmaps;
     //std::map<Stones::Stone_Type,wxBitmap> stone_bitmaps;
     std::vector<std::map<int/*num*/,wxBitmap> > num_bitmaps;
     wxBitmap click_mark, stone_mark, field_mark;
     wxBitmap background, stone_base;
 
-    Bitmap_Set() { num_bitmaps.resize(3); /* 3 directions */ }
-  };
+    Bitmap_Set()
+    {
+        num_bitmaps.resize(3); /* 3 directions */
+    }
+};
 
-  class Bitmap_Handler
-  {
-  public:
+class Bitmap_Handler
+{
+public:
     Bitmap_Set normal;
     Bitmap_Set rotated;
 
@@ -91,26 +94,26 @@ namespace relax
 
     void setup_field_stone_bitmaps();
     void setup_rotated_bitmaps();
-  };
+};
 
-  // ============================================================================
-  // panel classes
-  // ============================================================================
+// ============================================================================
+// panel classes
+// ============================================================================
 
-  class Board_Panel : public Basic_Panel
-  {
-  public:
+class Board_Panel : public Basic_Panel
+{
+public:
     struct Settings
     {
-      bool rotate_board;	// display board rotated
-      bool show_coordinates;
-      wxFont coord_font;
-      Settings( bool rotate_board = true, bool show_coordinates = true, 
-		wxFont coord_font = wxNullFont );
+        bool rotate_board;	// display board rotated
+        bool show_coordinates;
+        wxFont coord_font;
+        Settings( bool rotate_board = true, bool show_coordinates = true,
+                  wxFont coord_font = wxNullFont );
     };
 
     Board_Panel( Settings &settings, Game_Manager &, WX_GUI_Manager &, Sequence_Generator* &,
-		 int player_id );
+                 int player_id );
 
     void calc_dimensions();
     void draw( wxDC &dc ) const;
@@ -121,7 +124,7 @@ namespace relax
     std::pair<int,int>  get_field_pos( int col, int row ) const;
     Bitmap_Set         &get_bitmap_set() const;
     const Board &	get_board() const;
-  private:
+private:
     Settings &settings;
 
     Game_Manager &game_manager;
@@ -131,20 +134,20 @@ namespace relax
     int board_x, board_y;
     Sequence_Generator* &sequence_generator;
     int player_id;
-  };
+};
 
-  class Stone_Panel : public Basic_Panel
-  {
-  public:
+class Stone_Panel : public Basic_Panel
+{
+public:
     struct Settings
     {
-      bool rotate_stones;	// when board is rotated
-      bool multiple_stones;	// false: display count on stone
-      bool horizontal;
-      int max_stones;		// for multiple stones
-      wxFont stone_font;
-      Settings( bool rotate_stones=true, bool multiple_stones=true, bool horizontal=true, 
-		int max_stones=10, wxFont stone_font = wxNullFont );
+        bool rotate_stones;	// when board is rotated
+        bool multiple_stones;	// false: display count on stone
+        bool horizontal;
+        int max_stones;		// for multiple stones
+        wxFont stone_font;
+        Settings( bool rotate_stones=true, bool multiple_stones=true, bool horizontal=true,
+                  int max_stones=10, wxFont stone_font = wxNullFont );
     };
 
     Stone_Panel( Settings &, Stones &, Game_Manager &, WX_GUI_Manager &, Sequence_Generator* & );
@@ -157,7 +160,7 @@ namespace relax
     std::pair<int,int> get_field_pos( int stone_num, Stones::Stone_Type type ) const;
     std::pair<int,int> get_field_pos( std::pair<Stones::Stone_Type,int> ) const;
     std::pair<Stones::Stone_Type,int> get_stone( int x, int y ) const;
-  private:
+private:
     Settings &settings;
 
     Stones &stones;
@@ -166,32 +169,44 @@ namespace relax
 
     Bitmap_Handler &bitmap_handler;
     Sequence_Generator* &sequence_generator;
-  };
+};
 
-  class Player_Panel : public Vertical_Sizer
-  {
-  public:
+class Player_Panel : public Vertical_Sizer
+{
+public:
     struct Settings
     {
-      Settings( const relax::Stone_Panel::Settings &stone_settings,
-		const relax::Board_Panel::Settings &board_settings,
-		wxFont player_font = wxNullFont );
+        Settings( const relax::Stone_Panel::Settings &stone_settings,
+                  const relax::Board_Panel::Settings &board_settings,
+                  wxFont player_font = wxNullFont );
 
-      relax::Stone_Panel::Settings stone_settings;
-      relax::Board_Panel::Settings board_settings;
+        relax::Stone_Panel::Settings stone_settings;
+        relax::Board_Panel::Settings board_settings;
 
-      wxFont player_font;
+        wxFont player_font;
     };
 
     Player_Panel( Settings &, Player &, Game_Manager &, WX_GUI_Manager &, Sequence_Generator* & );
 
     virtual void on_click( int x, int y ) const;
 
-    inline const Stone_Panel &get_stone_panel() const { return stone_panel; }
-    inline const Board_Panel &get_board_panel() const { return board_panel; }
-    inline int get_id() const { return player.id; }
-    const Player &get_player() const { return player; }
-  private:
+    inline const Stone_Panel &get_stone_panel() const
+    {
+        return stone_panel;
+    }
+    inline const Board_Panel &get_board_panel() const
+    {
+        return board_panel;
+    }
+    inline int get_id() const
+    {
+        return player.id;
+    }
+    const Player &get_player() const
+    {
+        return player;
+    }
+private:
     Settings &settings;
 
     Player &player;
@@ -207,37 +222,37 @@ namespace relax
     class Header_Panel : public Basic_Panel
     {
     public:
-      Header_Panel( Settings&, Player &player );
-      void draw_text( wxDC &dc ) const;
-      void calc_dimensions();
+        Header_Panel( Settings&, Player &player );
+        void draw_text( wxDC &dc ) const;
+        void calc_dimensions();
     private:
-      Settings &settings;
-      Player &player;
+        Settings &settings;
+        Player &player;
     };
     Header_Panel header_panel;
-  };
+};
 
-  class Game_Panel : public Horizontal_Sizer
-  {
-  public:
+class Game_Panel : public Horizontal_Sizer
+{
+public:
     struct Settings
     {
-      enum Arrangement_Type { arrange_standard, arrange_stones_right };
-      Settings( const Board_Panel::Settings &board_settings, 
-		const Player_Panel::Settings &player_settings,
-		const Stone_Panel::Settings &common_stone_settings,
-		Arrangement_Type arrangement = arrange_stones_right,
-		wxString skin_file = wxT(""), wxString beep_file = wxT(""), 
-		bool play_sound = false );
-      Settings();
+        enum Arrangement_Type { arrange_standard, arrange_stones_right };
+        Settings( const Board_Panel::Settings &board_settings,
+                  const Player_Panel::Settings &player_settings,
+                  const Stone_Panel::Settings &common_stone_settings,
+                  Arrangement_Type arrangement = arrange_stones_right,
+                  wxString skin_file = wxT(""), wxString beep_file = wxT(""),
+                  bool play_sound = false );
+        Settings();
 
-      Board_Panel::Settings  board_settings;
-      Player_Panel::Settings player_settings;
-      Stone_Panel::Settings  common_stone_settings;
+        Board_Panel::Settings  board_settings;
+        Player_Panel::Settings player_settings;
+        Stone_Panel::Settings  common_stone_settings;
 
-      Arrangement_Type arrangement;
-      wxString skin_file, beep_file;
-      bool play_sound;
+        Arrangement_Type arrangement;
+        wxString skin_file, beep_file;
+        bool play_sound;
     };
 
     Game_Panel( Settings &, Game_Manager &, WX_GUI_Manager &, Sequence_Generator* & );
@@ -250,12 +265,18 @@ namespace relax
     void update_player_panels();
 
     //inline const Board_Panel &get_board_panel() const { return board_panel; }
-    inline const Stone_Panel &get_stone_panel() const { return stone_panel; }
-    inline const std::list<Player_Panel*> &get_player_panels() const { return player_panels; }
+    inline const Stone_Panel &get_stone_panel() const
+    {
+        return stone_panel;
+    }
+    inline const std::list<Player_Panel*> &get_player_panels() const
+    {
+        return player_panels;
+    }
     const Player_Panel *get_player_panel( int id ) const;
     const wxBitmap     &get_background() const;
     Bitmap_Set         &get_bitmap_set() const;
-  private:
+private:
     void rearrange_panels();
 
     Settings &settings;
@@ -270,15 +291,15 @@ namespace relax
     std::list<Player_Panel*> player_panels;
     Horizontal_Sizer player_panel_sizer;
     Stone_Panel stone_panel;
-  };
-  
-  // ============================================================================
-  // help classes
-  // ============================================================================
+};
 
-  class Mouse_Handler : public wxEvtHandler, public Generic_Mouse_Input
-  {
-  public:
+// ============================================================================
+// help classes
+// ============================================================================
+
+class Mouse_Handler : public wxEvtHandler, public Generic_Mouse_Input
+{
+public:
     Mouse_Handler( Game_Manager &, WX_GUI_Manager &, Sequence_Generator* & );
 
     // inherited from Generic_Mouse_Input
@@ -287,31 +308,31 @@ namespace relax
     virtual long get_used_time();
 
     void on_animation_done( wxCommandEvent& );
-  private:
+private:
     Game_Manager &game_manager;
     WX_GUI_Manager &gui_manager;
-    Sequence_Generator* &sequence_generator_hook; // storage position for access 
-						  // by Mouse event handler
+    Sequence_Generator* &sequence_generator_hook; // storage position for access
+    // by Mouse event handler
     wxStopWatch stop_watch;
     long used_time;
 
     AI_Input *ai;		// for giving hints
 
     DECLARE_EVENT_TABLE()
-  };
+};
 
-  // ============================================================================
-  // game classes
-  // ============================================================================
+// ============================================================================
+// game classes
+// ============================================================================
 
-  /*! class WX_GUI_Manager
-   *  standard GUI implementation for wxWindows
-   */
-  
-  class WX_GUI_Manager : public Game_UI_Manager, public Horizontal_Sizer, 
-			 public Variants_Display_Notifiee
-  {
-  public:
+/*! class WX_GUI_Manager
+ *  standard GUI implementation for wxWindows
+ */
+
+class WX_GUI_Manager : public Game_UI_Manager, public Horizontal_Sizer,
+    public Variants_Display_Notifiee
+{
+public:
     WX_GUI_Manager( Game_Manager&, Game_Window&, Variants_Display_Manager& );
     ~WX_GUI_Manager();
     virtual void calc_dimensions();
@@ -323,8 +344,8 @@ namespace relax
     virtual void setup_game_display(); // setup all windows to display game
     virtual void set_board( const Game &game );
     virtual void update_board( const Game &game );
-    virtual void report_scores( const Game* game, 
-				std::multimap<int/*score*/,const Player*> scores );
+    virtual void report_scores( const Game* game,
+                                std::multimap<int/*score*/,const Player*> scores );
     virtual void report_winner( Player *player );
     virtual void report_error( wxString msg, wxString caption );
     virtual void report_information( wxString msg, wxString caption );
@@ -338,10 +359,10 @@ namespace relax
     virtual void stop_user_activity();
     virtual void stop_animations();
     virtual void abort_all_activity();  // stop user activity and animations
-    virtual void do_move_slowly( Move_Sequence sequence, wxEvtHandler *done_handler = 0, 
-				 int event_id=-1, int abort_id=-2 ); // show user how move is done
-    virtual void undo_move_slowly( wxEvtHandler *done_handler = 0, 
-    				   int event_id=-1, int abort_id=-2 );// show user how move is undone
+    virtual void do_move_slowly( Move_Sequence sequence, wxEvtHandler *done_handler = 0,
+                                 int event_id=-1, int abort_id=-2 ); // show user how move is done
+    virtual void undo_move_slowly( wxEvtHandler *done_handler = 0,
+                                   int event_id=-1, int abort_id=-2 );// show user how move is undone
     virtual void show_status_text( wxString text ); // shows text in status bar
     virtual void beep();
 
@@ -356,7 +377,7 @@ namespace relax
     // change settings
     void load_settings();
     void save_settings();
-    bool load_skin( wxString filename ); 
+    bool load_skin( wxString filename );
     bool load_beep( wxString filename );
 
     // ui event commands
@@ -364,12 +385,27 @@ namespace relax
     void mouse_click_right( int x, int y );
     void refresh();
 
-    inline Bitmap_Handler &get_bitmap_handler() { return bitmap_handler; }
-    inline const Game_Panel &get_game_panel() const { return game_panel; }
-    inline Game_Panel::Settings &get_game_settings() { return game_settings; }
-    inline Mouse_Handler &get_mouse_handler() { return mouse_handler; }
-    inline Game_Window &get_game_window() { return game_window; }
-  private:
+    inline Bitmap_Handler &get_bitmap_handler()
+    {
+        return bitmap_handler;
+    }
+    inline const Game_Panel &get_game_panel() const
+    {
+        return game_panel;
+    }
+    inline Game_Panel::Settings &get_game_settings()
+    {
+        return game_settings;
+    }
+    inline Mouse_Handler &get_mouse_handler()
+    {
+        return mouse_handler;
+    }
+    inline Game_Window &get_game_window()
+    {
+        return game_window;
+    }
+private:
     friend class Game_Manager;
     Game_Manager &game_manager;
     Game_Window  &game_window;
@@ -394,7 +430,7 @@ namespace relax
 #if wxUSE_SOUND
     wxSound sound_beep;
 #endif
-  };
+};
 
 }
 

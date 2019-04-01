@@ -1,17 +1,17 @@
 /*
  * manager.hpp
- * 
+ *
  * management classes
- * 
- * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de) 
- * 
- * This file may be distributed and/or modified under the terms of the 
- * GNU General Public License version 2 as published by the Free Software 
- * Foundation. 
- * 
+ *
+ * Copyright (c) 2003 by Martin Trautmann (martintrautmann@gmx.de)
+ *
+ * This file may be distributed and/or modified under the terms of the
+ * GNU General Public License version 2 as published by the Free Software
+ * Foundation.
+ *
  * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  */
 
 #if (defined(VERSION_ZERTZ) && defined(VERSION_DVONN))
@@ -64,10 +64,10 @@ namespace bloks
 namespace relax
 #endif
 {
-  class Game_Manager;
-  class Game_UI_Manager;
-  class Game_Setup_Manager;
-  class Standalone_Game_Setup_Manager;
+class Game_Manager;
+class Game_UI_Manager;
+class Game_Setup_Manager;
+class Standalone_Game_Setup_Manager;
 }
 
 #if defined(VERSION_ZERTZ)
@@ -104,12 +104,12 @@ namespace bloks
 namespace relax
 #endif
 {
-  /*! abstract class Game_Setup_Display_Handler
-   *  displays everything during game setup
-   */
-  class Game_Setup_Display_Handler
-  {
-  public:
+/*! abstract class Game_Setup_Display_Handler
+ *  displays everything during game setup
+ */
+class Game_Setup_Display_Handler
+{
+public:
     virtual ~Game_Setup_Display_Handler();
 
     virtual void game_setup() = 0;
@@ -133,15 +133,15 @@ namespace relax
     virtual void game_started() = 0;
     virtual bool ask_new_game( wxString who ) = 0; // other player asks for a new game (true: accept)
     virtual bool ask_undo_moves( wxString who, int n = 2 ) = 0; // other player asks to undo a move
-								// (true: accept)
-  };
+    // (true: accept)
+};
 
-  /*! abstract class Game_Setup_Manager
-   *  manages the setup of a game
-   */
-  class Game_Setup_Manager
-  {
-  public:
+/*! abstract class Game_Setup_Manager
+ *  manages the setup of a game
+ */
+class Game_Setup_Manager
+{
+public:
     enum Game_State { everyone_ready, not_ready, too_few_players, too_many_players };
     enum Answer_Type { accept, deny, wait_for_answer };
     enum Type { alone, server, client };
@@ -169,22 +169,25 @@ namespace relax
     virtual Answer_Type ask_undo_moves(int n=2) = 0; // request to undo n half moves
     virtual void force_new_game(bool on_own=false) = 0; // force new game (may close connections)
     virtual void stop_game() = 0;  // stop game
-    virtual void game_setup_entered() = 0;  // game setup entered 
+    virtual void game_setup_entered() = 0;  // game setup entered
     virtual bool is_allow_game_setup_abort() = 0; // is it allowed to abort the game setup?
 
     virtual ~Game_Setup_Manager();
-  };
+};
 
-  /*! class Game_Manager
-   *  manages central game loop
-   */
-  class Game_Manager
-  {
-  public:
+/*! class Game_Manager
+ *  manages central game loop
+ */
+class Game_Manager
+{
+public:
     Game_Manager( int game_event_id, Game_UI_Manager *ui_manager=0 );
     ~Game_Manager();
     void set_ui_manager( Game_UI_Manager * );
-    Game_UI_Manager *get_ui_manager() { return ui_manager; }
+    Game_UI_Manager *get_ui_manager()
+    {
+        return ui_manager;
+    }
 
     void start_game();
     void continue_game();
@@ -204,64 +207,83 @@ namespace relax
     AI_Input *get_hint_ai();
     AI_Input *get_player_ai();
 
-    inline const Game &get_game() { return game; }
-    inline Game_Setup_Manager *get_game_setup_manager() { return game_setup_manager; }
+    inline const Game &get_game()
+    {
+        return game;
+    }
+    inline Game_Setup_Manager *get_game_setup_manager()
+    {
+        return game_setup_manager;
+    }
 
     inline void set_game_setup_manager( Game_Setup_Manager *sm )
-    { game_setup_manager = sm; }
+    {
+        game_setup_manager = sm;
+    }
     inline void set_game_setup_display_handler( Game_Setup_Display_Handler *sm )
-    { game_setup_display_handler = sm; }
-    inline bool is_out_of_order_game() { return game.is_out_of_order(); }
-  private:
+    {
+        game_setup_display_handler = sm;
+    }
+    inline bool is_out_of_order_game()
+    {
+        return game.is_out_of_order();
+    }
+private:
     Game_Setup_Manager *game_setup_manager;
     Game_Setup_Display_Handler *game_setup_display_handler;
     Game_UI_Manager *ui_manager;
     Game game;
     bool valid_game, game_stopped;
-    
+
     AI_Input *ai;		// may be replaced by multiple AIs
 
     bool undo_requested, new_game_requested;
     int num_undo_moves;
-  // game specific event ID
+    // game specific event ID
     int game_event_id;
-  };
+};
 
-  class Variants_Display_Notifiee
-  {
-  public:
+class Variants_Display_Notifiee
+{
+public:
     virtual ~Variants_Display_Notifiee() {}
     virtual void selected_variant( std::list<unsigned> variant_id_path ) = 0;
-  };
+};
 
-  class Variants_Display_Manager
-  {
-  public:
+class Variants_Display_Manager
+{
+public:
     Variants_Display_Manager() : notifiee(0), allow_selection(false) {}
     virtual ~Variants_Display_Manager() {}
 
     virtual void reset() = 0;
     virtual void show_variant_tree(const Variant_Tree &,
-				   Coordinate_Translator *) = 0;
-    void set_notifiee(Variants_Display_Notifiee* _notifiee) { notifiee = _notifiee; }
-    void set_allow_selection( bool allow ) { allow_selection = allow; }
-  protected:
+                                   Coordinate_Translator *) = 0;
+    void set_notifiee(Variants_Display_Notifiee* _notifiee)
+    {
+        notifiee = _notifiee;
+    }
+    void set_allow_selection( bool allow )
+    {
+        allow_selection = allow;
+    }
+protected:
     Variants_Display_Notifiee* notifiee;
     bool allow_selection;
-  };
+};
 
-  /*! abstract class Game_UI_Manager
-   *  interface for user interfaces
-   */
-  class Game_UI_Manager
-  {
-  public:
+/*! abstract class Game_UI_Manager
+ *  interface for user interfaces
+ */
+class Game_UI_Manager
+{
+public:
     // interface for ui access from game_manager
     virtual void setup_game_display() = 0; // setup all windows to display game
     virtual void set_board( const Game &game ) = 0;
     virtual void update_board( const Game &game ) = 0;
-    virtual void report_scores( const Game* game, 
-				std::multimap<int/*score*/,const Player*> scores ) = 0;
+    virtual void report_scores( const Game* game,
+                                std::multimap<int/*score*/,const Player*> scores ) = 0;
     virtual void report_winner( Player *player ) = 0;
     virtual void report_error( wxString msg, wxString caption ) = 0;
     virtual void report_information( wxString msg, wxString caption ) = 0;
@@ -275,38 +297,47 @@ namespace relax
     virtual void stop_user_activity() = 0;
     virtual void stop_animations() = 0;
     virtual void abort_all_activity() = 0;
-    virtual void do_move_slowly( Move_Sequence sequence, wxEvtHandler *done_handler = 0, 
-				 int event_id=-1, int abort_id=-1 ) = 0;
-				// show user how move is done
-    virtual void undo_move_slowly( wxEvtHandler *done_handler = 0, 
-				   int event_id=-1, int abort_id=-1 ) = 0;
-				// show user how move is undone
+    virtual void do_move_slowly( Move_Sequence sequence, wxEvtHandler *done_handler = 0,
+                                 int event_id=-1, int abort_id=-1 ) = 0;
+    // show user how move is done
+    virtual void undo_move_slowly( wxEvtHandler *done_handler = 0,
+                                   int event_id=-1, int abort_id=-1 ) = 0;
+    // show user how move is undone
     virtual void show_status_text( wxString text ) = 0; // shows text in status bar
     virtual void beep() = 0;
     virtual void refresh() = 0;
 
     // interface for information access
     virtual Player_Input *get_user_input() = 0;
-    Game &get_display_game() { return display_game; }
-    Variant *get_target_variant() { return target_variant; } 
-				// attention: this pointer is only
-				// valid for current display_game (exchanged every move)
-    void clear_target_variant() { target_variant = 0; }
+    Game &get_display_game()
+    {
+        return display_game;
+    }
+    Variant *get_target_variant()
+    {
+        return target_variant;
+    }
+    // attention: this pointer is only
+    // valid for current display_game (exchanged every move)
+    void clear_target_variant()
+    {
+        target_variant = 0;
+    }
 
     Game_UI_Manager( const Game &game );
     virtual ~Game_UI_Manager();
-  protected:
+protected:
     Game display_game;
 
     Variant *target_variant;
-  };
+};
 
-  /*! class Standalone_Game_Setup_Manager
-   *  manages the setup of a standalone game
-   */
-  class Standalone_Game_Setup_Manager : public Game_Setup_Manager
-  {
-  public:
+/*! class Standalone_Game_Setup_Manager
+ *  manages the setup of a standalone game
+ */
+class Standalone_Game_Setup_Manager : public Game_Setup_Manager
+{
+public:
     Standalone_Game_Setup_Manager( Game_Manager & );
     ~Standalone_Game_Setup_Manager();
 
@@ -336,7 +367,7 @@ namespace relax
     virtual void stop_game();   // stop game
     virtual void game_setup_entered();  // game setup entered
     virtual bool is_allow_game_setup_abort(); // is it allowed to abort the game setup?
-  private:
+private:
     Game_Manager &game_manager;
     Game_Setup_Display_Handler *display_handler;
 
@@ -345,7 +376,7 @@ namespace relax
     int current_id;
     std::list<Player> players;
     std::map<int,std::list<Player>::iterator> id_player; // Table id->player
-  };
+};
 
 }
 
