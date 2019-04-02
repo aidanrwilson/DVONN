@@ -3690,8 +3690,8 @@ fi
 
 # Define the identity of the package.
 
- PACKAGE=holtz
- VERSION=1.5.0
+ PACKAGE=dvonn
+ VERSION=0.0.1
 
 
 cat >>confdefs.h <<_ACEOF
@@ -4291,7 +4291,7 @@ export CXXFLAGS="$CXXFLAGS $BACKCOMPATIBILITY `$wxconfig_EXEC $GTKVER $STATIC $U
 WINDRES_FLAGS="`$wxconfig_EXEC $GTKVER $STATIC $UNICODE --cflags | sed 's/-m[^ ]*//g'`"
 
 
-ac_config_files="$ac_config_files Makefile zertz/Makefile dvonn/Makefile bloks/Makefile relax/Makefile common/Makefile skins/Makefile skins/eins/Makefile sounds/Makefile locale/Makefile locale/de/Makefile locale/de/LC_MESSAGES/Makefile help/Makefile"
+ac_config_files="$ac_config_files Makefile dvonn/Makefile common/Makefile skins/Makefile skins/eins/Makefile sounds/Makefile locale/Makefile locale/de/Makefile locale/de/LC_MESSAGES/Makefile help/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5052,10 +5052,7 @@ do
   case $ac_config_target in
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "zertz/Makefile") CONFIG_FILES="$CONFIG_FILES zertz/Makefile" ;;
     "dvonn/Makefile") CONFIG_FILES="$CONFIG_FILES dvonn/Makefile" ;;
-    "bloks/Makefile") CONFIG_FILES="$CONFIG_FILES bloks/Makefile" ;;
-    "relax/Makefile") CONFIG_FILES="$CONFIG_FILES relax/Makefile" ;;
     "common/Makefile") CONFIG_FILES="$CONFIG_FILES common/Makefile" ;;
     "skins/Makefile") CONFIG_FILES="$CONFIG_FILES skins/Makefile" ;;
     "skins/eins/Makefile") CONFIG_FILES="$CONFIG_FILES skins/eins/Makefile" ;;
@@ -5623,4 +5620,3 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
-
